@@ -47,5 +47,5 @@ history = model.fit(train_images, train_labels, epochs=10)
 print('Training done.')
 
 # save trained model
-model.save('saved_model_tf')
+model.save('saved_model_tf.keras')
 print('Model saved.')

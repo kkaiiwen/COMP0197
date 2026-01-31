@@ -12,7 +12,7 @@ class_names = ['airplane', 'automobile', 'bird', 'cat', 'deer', 'dog', 'frog', '
 
 
 ## load the trained model
-model = models.load_model('saved_model_tf')
+model = models.load_model('saved_model_tf.keras')
 
 
 ## inference
