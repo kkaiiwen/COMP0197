@@ -6,6 +6,7 @@ from PIL import Image
 
 from loader import H5ImageLoader
 import utils_tf as utils
+from network_tf import ResUNet
 
 
 DATA_PATH = './data'
@@ -14,7 +15,8 @@ DATA_PATH = './data'
 ## trained model
 save_path = "results_tf"
 epoch = 99
-seg_net_imported = tf.saved_model.load(os.path.join(save_path, 'epoch{:d}'.format(epoch)))
+seg_net_imported = ResUNet(init_ch=16)
+weights_path = os.path.join(save_path, f"epoch{epoch}.weights.h5")
 
 
 ## test data
@@ -23,10 +25,18 @@ loader_test = H5ImageLoader(DATA_PATH+'/images_test.h5', 20, DATA_PATH+'/labels_
 
 ## compute test results
 losses_all, dsc_scores_all, inf_times = [], [], []
+first_batch = True
+
 for frames_test, masks_test in loader_test:
 
     t0 = time.time()
     frames_test, masks_test = utils.pre_process(frames_test, masks_test)
+
+    if first_batch:
+        _ = seg_net_imported(frames_test, training=False)
+        seg_net_imported.load_weights(weights_path)
+        first_batch = False
+
     predicts_test = seg_net_imported(frames_test, training=False)
     inf_times += [time.time()-t0]
 

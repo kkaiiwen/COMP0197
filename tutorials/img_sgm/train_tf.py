@@ -79,5 +79,5 @@ for epoch in range(num_epochs):
             tf.reduce_mean(tf.concat(losses_all,axis=0)),
             tf.reduce_mean(tf.concat(dsc_scores_all,axis=0))
             ))
-        tf.saved_model.save(seg_net, os.path.join(save_path, 'epoch{:d}'.format(epoch)))
+        seg_net.save_weights(os.path.join(save_path, f"epoch{epoch}.weights.h5"))
         tf.print('Model saved.')
